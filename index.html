@@ -197,6 +197,14 @@
                 </div>
             </form>
         </div>
+        <div class="thank-you-overlay" id="thank-you-overlay">
+            <div class="thank-you-content">
+                <h2 class="thank-you-message">Thank You For Your Submission!</h2>
+                <p>Thank you for your interest in joining the Cavidus team! We appreciate you taking the time to apply
+                    and look forward to reviewing your qualifications.</p>
+                <button class="return-home-button" id="return-home">Return to Home</button>
+            </div>
+        </div>
     </div>
 
 
@@ -218,6 +226,8 @@
         const errorMessage = document.getElementById('error-message');
         const navbarLinks = document.querySelector('.navbar-links');
         const hamburger = document.querySelector('.hamburger');
+        const thankYouOverlay = document.getElementById('thank-you-overlay');
+        const returnHomeButton = document.getElementById('return-home');
 
 
         let formStepsNum = 0;
@@ -360,11 +370,20 @@
         }
 
         form.addEventListener('submit', function (event) {
-            if (!validateCurrentStep()) {
-                event.preventDefault();
-            } else {
-                alert('Form submitted successfully!');
+            event.preventDefault();
+            if (validateCurrentStep()) {
+                //alert('Form submitted successfully!'); // Remove this alert
+                thankYouOverlay.style.display = 'flex'; // Show thank you message
+                // Reset the form
+                form.reset();
+                formStepsNum = 0;
+                updateFormSteps();
+                updateProgressbar();
             }
+        });
+
+        returnHomeButton.addEventListener('click', () => {
+            thankYouOverlay.style.display = 'none';
         });
 
         updateFormSteps();
