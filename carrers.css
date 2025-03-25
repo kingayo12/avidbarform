@@ -206,7 +206,7 @@ input[type="email"]:focus {
 }
 
 .potrait_view {
-  width: 200px;
+  /* width: 200px; */
   /* height: 250px; */
   text-align: center;
   color: #fff;
@@ -215,6 +215,11 @@ input[type="email"]:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* background: pink; */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .potrait_view .view {
@@ -223,7 +228,7 @@ input[type="email"]:focus {
   background-size: cover;
   background-position: center;
   width: 150px;
-  padding: 0 10px;
+  /* padding: 0 10px; */
   border: 1px solid #ccc;
   display: flex;
   align-items: center;
@@ -234,7 +239,9 @@ input[type="email"]:focus {
 }
 
 .potrait_view .view img {
-  object-fit: contain;
+  object-fit: cover;
+  width: 100%;
+  /* aspect-ratio: 1; */
 }
 
 .pf {
