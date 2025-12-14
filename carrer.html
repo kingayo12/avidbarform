@@ -19,7 +19,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-logo">
-            <img src="./assets/imgs/logo.png" alt="">
+            <img src="./assets/imgs/logoc.png" alt="">
         </div>
         <ul class="navbar-links">
             <li><a href="/">Home</a></li>
@@ -53,7 +53,12 @@
                 <div class="progress-step" data-title="Languages & Qualification"></div>
                 <div class="progress-step" data-title="Experience"></div>
             </div>
-            <form id="jobForm">
+            <form id="jobForm" method="POST" enctype="multipart/form-data"
+                action="https://formsubmit.co/oreoluwaa08@gmail.com">
+                <input type="hidden" name="_subject" value="New Job Application - Cavidus Team">
+
+                <input type="hidden" name="_next" value="https://YOUR-WEBSITE.COM/thank-you.html">
+                <input type="hidden" name="_template" value="table">
 
                 <div class="form-step active">
                     <div class="form-group">
@@ -109,7 +114,6 @@
                     </div>
                 </div>
 
-
                 <div class="form-step ">
                     <div class="form-group pf">
                         <div class="potrait_view">
@@ -120,13 +124,14 @@
                         </div>
                         <div class="prt">
                             <div class="wrppf">
-                                <input type="file" id="portrait" name="portrait" accept="image/*" required>
+                                <input type="file" id="portrait" name="Portrait_Picture" accept="image/*" required>
                                 <button type="button" id="camera-button">Take Picture</button>
                                 <video id="camera-preview" autoplay></video>
                             </div>
                         </div>
                     </div>
                     <div class="button-container">
+                        <button type="button" class="prev-step btn-prev">Previous</button>
                         <button type="button" class="next-step btn-next">Next</button>
                     </div>
                 </div>
@@ -135,19 +140,19 @@
                     <div class="form-group lang_wrapper">
                         <label class="required">Languages:</label>
                         <div class="lang">
-                            <div class="wrp"> <input type="checkbox" id="english" name="languages" value="English">
+                            <div class="wrp"> <input type="checkbox" id="english" name="languages[]" value="English">
                                 <label for="english">English</label>
                             </div>
-                            <div class="wrp"> <input type="checkbox" id="yoruba" name="languages" value="Yoruba">
+                            <div class="wrp"> <input type="checkbox" id="yoruba" name="languages[]" value="Yoruba">
                                 <label for="yoruba">Yoruba</label>
                             </div>
-                            <div class="wrp"><input type="checkbox" id="igbo" name="languages" value="Igbo">
+                            <div class="wrp"><input type="checkbox" id="igbo" name="languages[]" value="Igbo">
                                 <label for="igbo">Igbo</label>
                             </div>
-                            <div class="wrp"> <input type="checkbox" id="hausa" name="languages" value="Hausa">
+                            <div class="wrp"> <input type="checkbox" id="hausa" name="languages[]" value="Hausa">
                                 <label for="hausa">Hausa</label>
                             </div>
-                            <div class="wrp"><input type="checkbox" id="others" name="languages" value="Others"><label
+                            <div class="wrp"><input type="checkbox" id="others" name="languages[]" value="Others"><label
                                     for="others">Others (Specify):</label></div>
                         </div>
                         <input type="text" id="others_specify" name="others_specify"
@@ -177,11 +182,11 @@
                     </div>
                     <div class="form-group">
                         <label for="cv">CV Attachment (Optional):</label>
-                        <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx">
+                        <input type="file" id="cv" name="CV_Attachment" accept=".pdf,.doc,.docx">
                     </div>
                     <div class="form-group">
                         <label for="otherAttachment">Other Attachment (Optional):</label>
-                        <input type="file" id="otherAttachment" name="otherAttachment"
+                        <input type="file" id="otherAttachment" name="Other_Attachment"
                             accept=".pdf,.doc,.docx, image/*">
                     </div>
                     <div class="button-container">
@@ -199,11 +204,12 @@
                 </div>
             </form>
         </div>
-        <div class="thank-you-overlay" id="thank-you-overlay">
+
+        <div class="thank-you-overlay" id="thank-you-overlay" style="display: none;">
             <div class="thank-you-content">
                 <h2 class="thank-you-message">Thank You For Your Submission!</h2>
-                <p>Thank you for your interest in joining the Cavidus team! We appreciate you taking the time to apply
-                    and look forward to reviewing your qualifications.</p>
+                <p>Thank you for your interest! We appreciate you taking the time to apply and will review your
+                    qualifications.</p>
                 <button class="return-home-button" id="return-home">Return to Home</button>
             </div>
         </div>
@@ -301,16 +307,19 @@
                 if (!portraitInput.files || portraitInput.files.length === 0) {
                     errorMessage.textContent = "Please upload a portrait picture.";
                     return false;
-                } else if (portraitInput.files[0].size > 1000000) {
-                    errorMessage.textContent = "Portrait picture must be 1MB or less.";
+                } else if (portraitInput.files[0].size > 3000000) {
+                    errorMessage.textContent = "Portrait picture must be 3MB or less.";
                     return false;
                 }
             }
+            // New code for Step 3 (formStepsNum === 3):
             if (formStepsNum === 3) {
-                const language = document.querySelector('input[name="languages"]:checked');
+                // Check if at least one checkbox with name="languages[]" is checked
+                const language = document.querySelector('input[name="languages[]"]:checked');
                 const qualification = document.getElementById('qualification').value;
+
                 if (!language || !qualification) {
-                    errorMessage.textContent = "Please select a Language and Qualification.";
+                    errorMessage.textContent = "Please select at least one Language and a Qualification.";
                     return false;
                 }
             }
@@ -318,57 +327,88 @@
             return true;
         }
 
+        // Global variable to hold the stream so we can stop it later
+        let mediaStream = null;
+
+        // Hide the video preview and show the "Take Picture" button initially
+        cameraPreview.style.display = 'none';
         cameraButton.addEventListener('click', async function () {
+            // Stop any existing stream
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+            }
+
             try {
+                // 1. Start the camera stream
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                mediaStream = stream; // Store the stream globally
                 cameraPreview.srcObject = stream;
                 cameraPreview.style.display = 'block';
 
-                const capture = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = cameraPreview.videoWidth;
-                    canvas.height = cameraPreview.videoHeight;
-                    const context = canvas.getContext('2d');
-                    context.drawImage(cameraPreview, 0, 0, canvas.width, canvas.height);
-                    canvas.toBlob((blob) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            const base64data = reader.result;
-                            // Here you can use base64data for upload
-                            console.log(base64data);
-                            // For display
-                            displayImage(base64data);
-                        };
-                        reader.readAsDataURL(blob);
-
-                        cameraPreview.srcObject.getVideoTracks().forEach(track => track.stop());
-                        cameraPreview.style.display = 'none';
-                        document.body.removeChild(captureButton);
-                    }, 'image/jpeg');
-                };
-
-                const captureButton = document.createElement('button');
-                captureButton.textContent = 'Capture';
-                captureButton.addEventListener('click', capture);
-                cameraPreview.parentNode.insertBefore(captureButton, cameraPreview.nextSibling);
-
-
+                // 2. Change 'Take Picture' button to 'Capture'
+                cameraButton.textContent = 'Capture';
+                cameraButton.removeEventListener('click', arguments.callee); // Remove current listener
+                cameraButton.addEventListener('click', capturePicture); // Add capture listener
 
             } catch (err) {
                 console.error('Error accessing camera:', err);
-                alert('Could not access camera.');
+                errorMessage.textContent = 'Could not access camera. Please try manual upload.';
             }
         });
 
+        async function capturePicture() {
+            if (!mediaStream) return;
+
+            // 1. Draw video frame to canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraPreview.videoWidth;
+            canvas.height = cameraPreview.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(cameraPreview, 0, 0, canvas.width, canvas.height);
+
+            // 2. Convert canvas to Blob (Image data)
+            canvas.toBlob((blob) => {
+                // 3. Create a File object from the blob
+                // This is the crucial step to sync captured image with the file input
+                const capturedFile = new File([blob], "captured_portrait.jpeg", {
+                    type: "image/jpeg",
+                    lastModified: Date.now()
+                });
+
+                // 4. Create a DataTransfer object and assign the File to the input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(capturedFile);
+                portraitInput.files = dataTransfer.files;
+
+                // 5. Display the captured image preview
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    displayImage(e.target.result);
+                };
+                reader.readAsDataURL(capturedFile);
+
+                // 6. Stop the camera and reset the button/display
+                mediaStream.getTracks().forEach(track => track.stop());
+                cameraPreview.style.display = 'none';
+                cameraButton.textContent = 'Take Picture';
+
+                // Reset the event listener to the initial state (start camera)
+                cameraButton.removeEventListener('click', capturePicture);
+                cameraButton.addEventListener('click', cameraButton.listeners[0]); // Re-attach the initial listener
+
+            }, 'image/jpeg', 0.9);
+        }
+
+        // Ensure the initial file upload works correctly too
         portraitInput.addEventListener('change', function (event) {
             const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const base64String = e.target.result;
-                console.log(base64String);
-                displayImage(base64String);
-            };
-            reader.readAsDataURL(file);
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    displayImage(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
         function displayImage(base64String) {
@@ -378,19 +418,26 @@
             portraitView.appendChild(img);
         }
 
+        // 💥 KEY CHANGE: Modified the submit listener 💥
         form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            if (validateCurrentStep()) {
-                //alert('Form submitted successfully!'); // Remove this alert
-                thankYouOverlay.style.display = 'flex'; // Show thank you message
-                // Reset the form
-                form.reset();
-                formStepsNum = 0;
-                updateFormSteps();
-                updateProgressbar();
+            // Only validate the final step (Step 4: Experience) before letting the form submit
+            if (formStepsNum !== 4) {
+                // If the user somehow hits submit before the last step, validate and move forward if possible.
+                event.preventDefault();
+                if (validateCurrentStep()) {
+                    formStepsNum++;
+                    updateFormSteps();
+                    updateProgressbar();
+                }
+            } else {
+                // This is the final step. Run the final validation.
+                if (!validateCurrentStep()) {
+                    event.preventDefault(); // Stop submission if validation fails
+                }
+                // If validation passes, the form is allowed to submit to FormSubmit.co
+                // The 'thank-you-overlay' is no longer needed here as FormSubmit redirects.
             }
         });
-
         returnHomeButton.addEventListener('click', () => {
             thankYouOverlay.style.display = 'none';
         });

@@ -323,8 +323,8 @@ button {
   display: flex;
   justify-content: space-between; /* Space out logo and links */
   align-items: center; /* Vertically center items */
-  padding: 10px 20px;
-  height: 60px;
+  padding: 10px;
+  height: 40px;
   z-index: 1000; /* Ensure navbar is above other elements */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
 }
@@ -333,7 +333,8 @@ button {
   font-size: 20px;
   font-weight: bold;
   margin-right: auto; /* Push logo to the left */
-  width: 100px;
+  margin-left: 20px;
+  width: 80px;
 }
 
 .navbar-logo img {
@@ -356,7 +357,7 @@ button {
 .navbar-links li a {
   color: rgb(0, 0, 0);
   text-decoration: none;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .navbar-links li a:hover {

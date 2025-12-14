@@ -258,3 +258,68 @@ Body {
     color: rgb(76, 12, 12);
   }
 }
+
+/* Define the Keyframes for Rightward Motion */
+@keyframes marquee-right {
+  /* Start position (100% off-screen to the left) */
+  from {
+    transform: translateX(-100%);
+  }
+  /* End position (move the content block completely off-screen to the right) */
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Marquee Wrapper - The viewport for the moving content */
+.marquee-container {
+  width: calc(100vw - 120px);
+  overflow: hidden; /* Hides the content when it's outside the container */
+  background-color: transparent;
+  padding: 10px 0;
+  border-top: 2px solid #ffffffe5; /* Example accent border */
+  border-bottom: 2px solid #ffffffe5;
+  white-space: nowrap; /* CRITICAL: Prevents the content from wrapping */
+}
+
+/* Marquee Content - The actual element that moves */
+.marquee-content {
+  display: inline-flex; /* Allows the content to move horizontally */
+  align-items: center;
+  justify-content: center;
+  animation: marquee-right 20s linear infinite; /* 20s speed, continuous, linear motion */
+  /* Ensures all items inside are vertically aligned */
+  vertical-align: middle;
+}
+
+/* Individual Items within the Marquee */
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30px;
+  color: white;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Logo Styling (Placeholder) */
+.logo-placeholder {
+  /* Placeholder for your Cavidus logo image or SVG */
+  display: inline-flex;
+  height: 30px; /* Adjust height to match your logo */
+  width: 100px; /* Adjust width to match your logo */
+  border-radius: 5px;
+  margin: 0 30px 0 0;
+
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-placeholder img {
+  width: 80%;
+}
