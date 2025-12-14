@@ -166,7 +166,7 @@
         /* Styling for the Countdown Timer */
         #countdown {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -238,7 +238,14 @@
         }
 
         /* Media query for smaller screens */
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
+
+            #countdown {
+
+                gap: 5px;
+                padding: 5px;
+
+            }
 
             .open_cont h1,
             .soon_cont h1 {
@@ -247,10 +254,16 @@
 
             .timer-unit {
                 min-width: 60px;
+                padding: 5px;
+                margin: 2px;
             }
 
             .timer-unit span {
-                font-size: 2em;
+                font-size: 16px;
+            }
+
+            .timer-unit small {
+                font-size: 7px;
             }
         }
     </style>
@@ -310,9 +323,9 @@
                 <div class=" marquee-content">
 
                 <div class="marquee-content-block">
-                    <span class="logo-placeholder">
+                    <!-- <span class="logo-placeholder">
                         <img src="./assets/imgs/logoc2.png" alt="Cavidus Logo">
-                    </span>
+                    </span> -->
                     <span class="marquee-item">Events</span>
                     <span class="marquee-item">|</span>
                     <span class="marquee-item">Bar and Lounge</span>
@@ -321,9 +334,9 @@
                 </div>
 
                 <div class="marquee-content-block">
-                    <span class="logo-placeholder">
+                    <!-- <span class="logo-placeholder">
                         <img src="./assets/imgs/logoc2.png" alt="Cavidus Logo">
-                    </span>
+                    </span> -->
                     <span class="marquee-item">Events</span>
                     <span class="marquee-item">|</span>
                     <span class="marquee-item">Bar and Lounge</span>
@@ -331,9 +344,9 @@
                     <span class="marquee-item">Games</span>
                 </div>
                 <div class="marquee-content-block">
-                    <span class="logo-placeholder">
+                    <!-- <span class="logo-placeholder">
                         <img src="./assets/imgs/logoc2.png" alt="Cavidus Logo">
-                    </span>
+                    </span> -->
                     <span class="marquee-item">Events</span>
                     <span class="marquee-item">|</span>
                     <span class="marquee-item">Bar and Lounge</span>
@@ -342,9 +355,9 @@
                 </div>
 
                 <div class="marquee-content-block">
-                    <span class="logo-placeholder">
+                    <!-- <span class="logo-placeholder">
                         <img src="./assets/imgs/logoc2.png" alt="Cavidus Logo">
-                    </span>
+                    </span> -->
                     <span class="marquee-item">Events</span>
                     <span class="marquee-item">|</span>
                     <span class="marquee-item">Bar and Lounge</span>
