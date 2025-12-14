@@ -268,11 +268,11 @@ Body {
 @keyframes marquee-right {
   /* Start position (100% off-screen to the left) */
   from {
-    transform: translateX(-100%);
+    transform: translateX(10%);
   }
   /* End position (move the content block completely off-screen to the right) */
   to {
-    transform: translateX(100%);
+    transform: translateX(-50%);
   }
 }
 
@@ -285,6 +285,10 @@ Body {
   border-top: 2px solid #ffffffe5; /* Example accent border */
   border-bottom: 2px solid #ffffffe5;
   white-space: nowrap; /* CRITICAL: Prevents the content from wrapping */
+}
+
+.smaller {
+  width: calc(100vw - 300px);
 }
 
 /* Marquee Content - The actual element that moves */
